@@ -1,0 +1,15 @@
+/classes/*
+*.prefs
+*.log
+license.xml
+.classpath
+.project
+target/
+.idea/
+logs/
+*.iml
+run.jar
+run.jar.original
+public/
+node_modules/
+dist/

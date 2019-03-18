@@ -15,6 +15,7 @@
     </parent>
 
     <packaging>jar</packaging>
+
     <name>micro-core</name>
 
     <properties>
@@ -70,57 +71,7 @@
         </dependency>
 
     </dependencies>
-    <developers>
-        <developer>
-            <name>ddggfcdgh</name>
-            <email>ddggfcdgh@126.com</email>
-        </developer>
-    </developers>
-    <scm>
-        <url>https://github.com/softbasic/micro-core</url>
-        <connection>scm:git:https://github.com/softbasic/micro-core.git</connection>
-    </scm>
 
-    <licenses>
-        <license>
-            <name>Apache 2</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-            <distribution>repo</distribution>
-            <comments>A business-friendly OSS license</comments>
-        </license>
-    </licenses>
-
-    <build>
-        <plugins>
-            <!--Maven GPG插件用于使用以下配置对组件进行签名-->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.5</version>
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <!--Nexus Staging Maven插件是将组件部署到OSS并将其发布到Central Repository的推荐方法-->
-            <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.6.8</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <serverId>oss</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
     <distributionManagement>
 
