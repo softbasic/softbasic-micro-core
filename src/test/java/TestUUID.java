@@ -1,4 +1,4 @@
-import com.github.softbasic.micro.h.utils.UUIDUtils;
+import com.github.softbasic.micro.utils.UUIDUtils;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
