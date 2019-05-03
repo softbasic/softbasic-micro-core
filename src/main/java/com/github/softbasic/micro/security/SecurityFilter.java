@@ -22,7 +22,7 @@ public class SecurityFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-        logger.info("安全验证开关："+auth+"");
+        logger.debug("安全验证开关："+auth+"");
 
         //如果不需要安全验证，则直接处理请求
         if(auth==null||(!auth))

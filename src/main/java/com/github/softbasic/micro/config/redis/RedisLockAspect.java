@@ -1,6 +1,7 @@
 package com.github.softbasic.micro.config.redis;
 
 
+import com.github.softbasic.micro.exception.BusinessException;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 import java.util.concurrent.TimeUnit;
+
+import static com.github.softbasic.micro.result.MicroStatus.REDIS_LOCK_WAIT_OVERTIME;
 
 @Component
 @Aspect
@@ -44,13 +47,14 @@ public class RedisLockAspect {
         long leaseTime = declaredAnnotation.leaseTime();//过期时间
         TimeUnit unit = declaredAnnotation.unit();//单位
         long waitTime = declaredAnnotation.waitTime();//阻塞时间
-        RLock lock = redissonClient.getFairLock("lock::" + lockName);//公平锁
+        RLock lock = redissonClient.getFairLock(lockName);//公平锁
         //尝试获取锁,没有获取到返回
         if (waitTime >= 0) {
             //时间内没有获取到锁，什么都不做
             if (lock.tryLock(waitTime, leaseTime, unit)) {
                 return execute(joinPoint, lock);
             }
+            throw new BusinessException(REDIS_LOCK_WAIT_OVERTIME);
         }
         //获取锁，一直等待
         if (waitTime < 0) {
@@ -61,16 +65,17 @@ public class RedisLockAspect {
     }
 
     private Object execute(ProceedingJoinPoint joinPoint, RLock lock) throws Throwable {
-        logger.info("加锁");
+        logger.info("加锁"+lock.getName());
         try {
             return joinPoint.proceed();
         } catch (Throwable e) {
-            e.printStackTrace();
-            throw new Exception(e);
+            throw e;
         } finally {
             if (lock.isHeldByCurrentThread() && lock.isLocked()) {//当前线程是否持有锁
-                logger.info("解锁");
+                logger.info("正常解锁"+lock.getName());
                 lock.unlock();
+            }else{
+                logger.info("锁"+lock.getName()+"已提前释放");
             }
         }
     }

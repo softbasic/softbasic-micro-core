@@ -12,7 +12,9 @@ public class RedisDao {
     @Autowired
     private RedissonClient redissonClient;
 
-
+    public RedissonClient redissonClient(){
+        return redissonClient;
+    }
 
     /**`
      * 获取字符串对象

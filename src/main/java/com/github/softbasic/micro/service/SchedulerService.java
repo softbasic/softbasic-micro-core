@@ -20,9 +20,9 @@ public class SchedulerService {
      * @param schedulerModel
      * @throws Exception
      */
-    public void startOneJob(SchedulerModel schedulerModel) throws Exception {
+    public void startJob(SchedulerModel schedulerModel) throws Exception {
 
-        Class<Job> jobClass = (Class<Job>) Class.forName(schedulerModel.getJobClass());
+        Class<Job> jobClass = (Class<Job>) Class.forName(schedulerModel.getJobClassName());
         JobDataMap jobDataMap = new JobDataMap();
         jobDataMap.put("schedulerModel", schedulerModel);
         JobDetail jobDetail = JobBuilder.newJob(jobClass)

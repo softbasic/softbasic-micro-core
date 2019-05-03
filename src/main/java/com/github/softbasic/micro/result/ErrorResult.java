@@ -9,4 +9,7 @@ public class ErrorResult extends MicroResult{
     public ErrorResult() {
         super(false,MicroStatus.ERROR, new JSONObject());
     }
+    public ErrorResult(String data) {
+        super(false,MicroStatus.ERROR, data);
+    }
 }

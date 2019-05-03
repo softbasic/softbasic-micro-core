@@ -3,8 +3,13 @@ package com.github.softbasic.micro.utils;
 import com.github.softbasic.micro.utils.date.DateStyle;
 import com.github.softbasic.micro.utils.date.DateUtil;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
+
 public class UTCUtils {
-    public static String getDateTime(){
+    public static String getUtcTime(){
         //1、取得本地时间：
         final java.util.Calendar cal = java.util.Calendar.getInstance();
 
@@ -21,5 +26,22 @@ public class UTCUtils {
         cal.add(java.util.Calendar.MILLISECOND, -(zoneOffset + dstOffset));
 
         return DateUtil.DateToString(cal.getTime(), DateStyle.YYYY_MM_DD_HH_MM_SS);
+    }
+
+    /**
+     * utc时间转成local时间
+     * @param utcTime
+     * @return
+     */
+    public static String utcToLocal(String utcTime) throws Exception{
+        try{
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+            Date utcDate = sdf.parse(utcTime);
+            sdf.setTimeZone(TimeZone.getDefault());
+            return sdf.format(utcDate.getTime());
+        }catch (Exception e){
+           throw e;
+        }
     }
 }

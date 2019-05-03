@@ -10,4 +10,7 @@ public class RocketDao {
     @Autowired
     private RocketMQTemplate rocketMQTemplate;
 
+    public RocketMQTemplate rocketMQTemplate() {
+        return rocketMQTemplate;
+    }
 }
