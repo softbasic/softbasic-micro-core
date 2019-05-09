@@ -8,4 +8,14 @@ import java.io.Serializable;
 public class BaseDto implements Serializable, Cloneable {
     private static final long serialVersionUID = 1L;
     private PageParam page;
+
+    public PageParam getPage() {
+        if(page==null){
+            PageParam page=new PageParam();
+            page.setPageNo(1);
+            page.setPageSize(20);
+            return page;
+        }
+        return page;
+    }
 }

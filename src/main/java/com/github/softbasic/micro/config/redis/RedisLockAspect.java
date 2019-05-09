@@ -47,7 +47,7 @@ public class RedisLockAspect {
         long leaseTime = declaredAnnotation.leaseTime();//过期时间
         TimeUnit unit = declaredAnnotation.unit();//单位
         long waitTime = declaredAnnotation.waitTime();//阻塞时间
-        RLock lock = redissonClient.getFairLock(lockName);//公平锁
+        RLock lock = redissonClient.getFairLock("lock:" +lockName);//公平锁
         //尝试获取锁,没有获取到返回
         if (waitTime >= 0) {
             //时间内没有获取到锁，什么都不做
