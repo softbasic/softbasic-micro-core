@@ -3,6 +3,7 @@ package com.github.softbasic.micro.config.redis;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.codec.JsonJacksonCodec;
+import org.redisson.codec.SerializationCodec;
 import org.redisson.config.Config;
 import org.redisson.config.SingleServerConfig;
 import org.redisson.spring.cache.CacheConfig;
@@ -43,7 +44,7 @@ public class RedissonConfig {
     @Bean
     CacheManager redissonCacheManager(RedissonClient redissonClient, RedissonProperties redssionProperties) {
         RedissonProperties.RedissonCache redissonCache = redssionProperties.getRedissonCache();
-        String cacheConfigs = redissonCache.getCacheConfigs()==null?"":redissonCache.getCacheConfigs();
+        String cacheConfigs = redissonCache.getCacheConfigs()==null?"secure:userInfo&2592000000,secure:interfaceAuth&315360000000,secure:interfaceVersion&315360000000":redissonCache.getCacheConfigs()+",secure:userInfo&2592000000,secure:interfaceAuth&315360000000,secure:interfaceVersion&315360000000";
         Map<String, CacheConfig> configMap = new HashMap<>();
         if(!cacheConfigs.trim().equals("".trim())){
             //如果有缓存配置，则逐个加入到管理器

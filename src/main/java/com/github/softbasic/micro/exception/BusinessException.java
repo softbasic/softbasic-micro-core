@@ -8,6 +8,9 @@ import lombok.EqualsAndHashCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 @Data
 @EqualsAndHashCode(callSuper=true)
 public class BusinessException extends RuntimeException{
@@ -34,12 +37,29 @@ public class BusinessException extends RuntimeException{
     public BusinessException(IMicroStatus microStatus, Exception exception){
         super(microStatus.statusMsg());
         this.errorLogId= UUIDUtils.create();
-        this.stackTraceMsg=StackTraceUtils.getInfo(exception);
+        this.stackTraceMsg=getInfo(exception);
         //如果捕获的是自定义异常，则类型定为源异常，否则使用捕获时异常
         if(exception instanceof BusinessException){
             this.microStatus=((BusinessException) exception).microStatus;
         }else{
             this.microStatus=microStatus;
+        }
+    }
+
+    /**
+     * 获取异常的堆栈信息
+     *
+     * @param t
+     * @return
+     */
+    public  String getInfo(Throwable t) {
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        try {
+            t.printStackTrace(pw);
+            return sw.toString();
+        } finally {
+            pw.close();
         }
     }
 

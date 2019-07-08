@@ -13,6 +13,7 @@ import java.io.Serializable;
 public class ShortMessage implements Serializable, Cloneable{
     private static final long serialVersionUID = 1L;
 
+    private String id;
     private String phone;
     private String message;
 

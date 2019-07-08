@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 @Repository
 public class RedisDao {
@@ -147,6 +148,37 @@ public class RedisDao {
     public long removeCaches(String cacheName,Object... keys){
         RMapCache<Object, Object> mapCache = redissonClient.getMapCache(cacheName);
         return mapCache.fastRemove(keys);
+    }
+
+
+    public RLock lock(String name) {
+        RLock fairLock = redissonClient.getFairLock("lock:" + name);
+        fairLock.lock(5 * 60 * 1000, TimeUnit.MILLISECONDS);
+        return fairLock;
+    }
+
+    public RLock lock(String name, long leaseTime, TimeUnit unit) {
+        RLock fairLock = redissonClient.getFairLock("lock:" + name);
+        fairLock.lock(leaseTime, unit);
+        return fairLock;
+    }
+
+    public RLock tryLock(String name) throws InterruptedException {
+        RLock fairLock = redissonClient.getFairLock("lock:" + name);
+        fairLock.tryLock(5 * 60 * 1000, TimeUnit.MILLISECONDS);
+        return fairLock;
+    }
+
+    public RLock tryLock(String name, long waitTime, long leaseTime, TimeUnit unit) throws InterruptedException {
+        RLock fairLock = redissonClient.getFairLock("lock:" + name);
+        fairLock.tryLock(waitTime, leaseTime, unit);
+        return fairLock;
+    }
+
+    public void unLock(RLock lock) {
+        if (lock.isHeldByCurrentThread() && lock.isLocked()) {//当前线程是否持有锁
+            lock.unlock();
+        }
     }
 
 }

@@ -20,6 +20,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -47,6 +48,23 @@ public class FastdfsService {
             Set<MataData> mataData = new HashSet<>();
             // 上传   （文件上传可不填文件信息，填入null即可）
             StorePath storePath = fastFileStorageClient.uploadFile(file.getInputStream(), file.getSize(), FilenameUtils.getExtension(file.getOriginalFilename()), mataData);
+            return storePath.getFullPath();
+        }catch (Exception exception){
+            throw new BusinessException(FASTDFS_UPLOAD_ERROR,exception);
+        }
+    }
+
+    /**
+     * 上传文件
+     * @param inputStream
+     * @return 文件路径，例如："group1/M00/00/00/wKgU6Vy4G6-AZEaJAAAnQiwQQ-E39.xlsx"
+     */
+    public String upload(InputStream inputStream){
+        try {
+            // 设置文件信息
+            Set<MataData> mataData = new HashSet<>();
+            // 上传   （文件上传可不填文件信息，填入null即可）
+            StorePath storePath = fastFileStorageClient.uploadFile(inputStream, 0, "", mataData);
             return storePath.getFullPath();
         }catch (Exception exception){
             throw new BusinessException(FASTDFS_UPLOAD_ERROR,exception);

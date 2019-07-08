@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 /**
  * Created by LCR on 2018/1/15.
@@ -36,7 +38,7 @@ public class ExceptionController {
         //异常日志ID
         String errorLogId= UUIDUtils.create();
         //日志堆栈
-        String stackTrace=StackTraceUtils.getInfo(exception);
+        String stackTrace=getInfo(exception);
 
         //装配异常消息，异步发送
         ExceptionMessage exceptionMessage=new ExceptionMessage();
@@ -55,7 +57,7 @@ public class ExceptionController {
 
 
 
-        response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        response.setStatus(HttpStatus.OK.value());
 
         return new ErrorResult();
     }
@@ -70,7 +72,7 @@ public class ExceptionController {
     @ExceptionHandler(BusinessException.class)
     public MicroResult handleBusinessException(HttpServletRequest request, HttpServletResponse response, BusinessException exception) {
         //日志堆栈,方法体中主动抛出的，还是catch中抛出的，二者不同
-        String stackTrace= StringUtils.isBlank(exception.getStackTraceMsg())?StackTraceUtils.getInfo(exception):exception.getStackTraceMsg();
+        String stackTrace= StringUtils.isBlank(exception.getStackTraceMsg())?getInfo(exception):exception.getStackTraceMsg();
 
         //装配异常消息，异步发送
         ExceptionMessage exceptionMessage=new ExceptionMessage();
@@ -87,8 +89,25 @@ public class ExceptionController {
         log.error("状态说明："+exception.getMicroStatus().statusMsg());
         log.error(stackTrace);
 
-        response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        response.setStatus(HttpStatus.OK.value());
 
         return new MicroResult(false,exception.getMicroStatus());
+    }
+
+    /**
+     * 获取异常的堆栈信息
+     *
+     * @param t
+     * @return
+     */
+    public  String getInfo(Throwable t) {
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        try {
+            t.printStackTrace(pw);
+            return sw.toString();
+        } finally {
+            pw.close();
+        }
     }
 }

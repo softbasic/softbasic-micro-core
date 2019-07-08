@@ -52,7 +52,7 @@ public class MicroMvcConfigurer implements WebMvcConfigurer {
         registration.setFilter(new SecurityFilter());
         registration.addInitParameter("auth", auth+"");
         registration.addUrlPatterns(new String[]{"/*"});
-        registration.setOrder(1);
+        registration.setOrder(100);
         return registration;
     }
 
