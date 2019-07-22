@@ -21,8 +21,12 @@ public class MongoDao{
         return mongoPrimary;
     }
 
+    /**
+     * 子系统中很多地方写法不规范，读写分离导致的延迟数据有问题，暂时全部改为主节点
+     * @return
+     */
     public MongoTemplate secondary() {
-        return mongoSecondary;
+        return mongoPrimary;
     }
 
     /**

@@ -41,7 +41,7 @@ public class SecurityFilter implements Filter {
             return;
         }
 
-        log.debug("安全验证开关：" + this.auth + "");
+
         //如果需要安全验证
         if (this.auth != null && this.auth) {
             String path = request.getRequestURI();
@@ -56,7 +56,7 @@ public class SecurityFilter implements Filter {
 
             //验证接口版本
             String version = request.getHeader("version");
-            log.info("客户端版本:"+version);
+
             if(BaseUtils.isNotBlank(version)){
                 JSONObject versionServer=securityCacheDao.getVersion("version");
                 if(versionServer!=null&&versionServer.get("version")!=null&&versionServer.get("downloadUrl")!=null){
@@ -65,6 +65,7 @@ public class SecurityFilter implements Filter {
                         log.error("请求: " + request.getRequestURI() + "版本已过期！");
                         JSONObject data=new JSONObject();
                         data.put("downloadUrl",versionServer.get("downloadUrl"));
+                        data.put("iosDownloadUrl",versionServer.get("iosDownloadUrl"));
                         MicroResult microResult = new MicroResult(true, MicroStatus.VERSION.statusCode(),versionServer.getString("info"),data);
                         response.setStatus(HttpStatus.OK.value());
                         response.setContentType("application/json");
