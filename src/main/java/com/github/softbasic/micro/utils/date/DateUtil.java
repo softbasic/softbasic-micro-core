@@ -643,4 +643,128 @@ public class DateUtil {
         long time = Math.abs(date.getTime() - otherDate.getTime());
         return (int)time/(24 * 60 * 60 * 1000);
     }
+
+    /**
+     * 比较大小
+     * @param date
+     * @param otherDate
+     * @return
+     */
+    public static Boolean compare(String date,String otherDate){
+        return compare(StringToDate(date), StringToDate(otherDate));
+    }
+
+    public static Boolean compare(Date date,Date otherDate){
+        return date.getTime()>otherDate.getTime()?true:false;
+    }
+
+    public static Boolean gte(Date date,Date otherDate){
+        return date.getTime()>=otherDate.getTime()?true:false;
+    }
+
+    /**
+     * 大于等于
+     * @param date
+     * @param otherDate
+     * @return
+     */
+    public static Boolean gte(String date,String otherDate){
+        return gte(StringToDate(date), StringToDate(otherDate));
+    }
+
+
+
+    /**
+     * date在otherDate之后
+     * @param date
+     * @param otherDate
+     * @return
+     */
+    public static Boolean after(String date,String otherDate){
+        return StringToDate(date).getTime()>StringToDate(otherDate).getTime();
+    }
+
+    /**
+     * date在otherDate之前，或者同时
+     * @param date
+     * @param otherDate
+     * @return
+     */
+    public static Boolean before(String date,String otherDate){
+        return StringToDate(date).getTime()<=StringToDate(otherDate).getTime();
+    }
+
+    /**
+     * 小于
+     * @param date
+     * @param otherDate
+     * @return
+     */
+    public static Boolean lt(Date date,Date otherDate){
+        return date.getTime()<otherDate.getTime()?true:false;
+    }
+    /**
+     * 小于
+     * @param date
+     * @param otherDate
+     * @return
+     */
+    public static Boolean lt(String date,String otherDate){
+        return lt(StringToDate(date), StringToDate(otherDate));
+    }
+
+    /**
+     * 时间差的绝对值，date1-date2
+     */
+    public static Date reduce (Date date1,Date date2){
+        long time1=date1.getTime();
+        long time2=date2.getTime();
+        long test=Math.abs(time2-time1);
+        Date result=new Date();
+        result.setTime(test);
+        return result;
+    }
+    /**
+     * 时间差的绝对值，date1-date2
+     */
+    public static String reduce (Date date1,Date date2,DateStyle dateStyle){
+        long time1=date1.getTime();
+        long time2=date2.getTime();
+        long test=Math.abs(time2-time1);
+        long minites=test/(1000*60);
+        long miao=(test%(1000*60))/1000;
+        return minites+"分"+miao+"秒";
+    }
+
+    public static String[] getMonthFirstDayAndLastDay(String  date,DateStyle ds) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date date1=DateUtil.StringToDate(date,ds);
+
+        Calendar c = Calendar.getInstance();
+        c.setTime(date1);
+
+        //获取当前月第一天：
+        c.add(Calendar.MONTH, 0);
+        c.set(Calendar.DAY_OF_MONTH,1);//设置为1号,当前日期既为本月第一天
+        String first = format.format(c.getTime());
+
+        //获取当前月最后一天
+        c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
+        String last = format.format(c.getTime());
+        return new String[]{first,last};
+    }
+
+    public static String getMonthFirstDay(Date date1) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
+        Calendar c = Calendar.getInstance();
+        c.setTime(date1);
+
+        //获取当前月第一天：
+        c.add(Calendar.MONTH, 0);
+        c.set(Calendar.DAY_OF_MONTH,1);//设置为1号,当前日期既为本月第一天
+        String first = format.format(c.getTime());
+
+        return  first;
+    }
 }
