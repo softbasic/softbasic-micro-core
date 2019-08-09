@@ -3,6 +3,7 @@ package com.github.softbasic.micro.service;
 
 import com.github.softbasic.micro.exception.BusinessException;
 import com.github.softbasic.micro.model.ImageInfoModel;
+import com.github.softbasic.micro.result.MicroStatus;
 import com.github.tobato.fastdfs.domain.MataData;
 import com.github.tobato.fastdfs.domain.StorePath;
 import com.github.tobato.fastdfs.service.FastFileStorageClient;
@@ -19,8 +20,10 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.channels.FileChannel;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -55,10 +58,11 @@ public class FastdfsService {
     }
 
     /**
-     * 上传文件
+     * 上传文件,本方法没有扩展名，底层会报错.请使用另一个重载方法
      * @param inputStream
      * @return 文件路径，例如："group1/M00/00/00/wKgU6Vy4G6-AZEaJAAAnQiwQQ-E39.xlsx"
      */
+    @Deprecated
     public String upload(InputStream inputStream){
         try {
             // 设置文件信息
@@ -70,7 +74,43 @@ public class FastdfsService {
             throw new BusinessException(FASTDFS_UPLOAD_ERROR,exception);
         }
     }
+    /**
+     * 上传文件
+     * @param inputStream
+     * @return 文件路径，例如："group1/M00/00/00/wKgU6Vy4G6-AZEaJAAAnQiwQQ-E39.xlsx"
+     */
+    public String upload(InputStream inputStream,String fileExtName){
+        try {
+            // 设置文件信息
+            Set<MataData> mataData = new HashSet<>();
+            // 上传   （文件上传可不填文件信息，填入null即可）
+            StorePath storePath = fastFileStorageClient.uploadFile(inputStream, inputStream.available(), fileExtName, mataData);
+            return storePath.getFullPath();
+        }catch (Exception exception){
+            throw new BusinessException(FASTDFS_UPLOAD_ERROR,exception);
+        }
+    }
+    /**
+     * 上传文件
+     * @param file
+     * @return 文件路径，例如："group1/M00/00/00/wKgU6Vy4G6-AZEaJAAAnQiwQQ-E39.xlsx"
+     */
+    public String upload(File file){
 
+        try {
+            // 设置文件信息
+            Set<MataData> mataData = new HashSet<>();
+            if(file.isDirectory()){
+                throw new BusinessException(MicroStatus.FASTDFS_UPLOAD_DIR_ERROR);
+            }
+            String fileName = file.getName();
+            String fileExtName=fileName.substring(fileName.lastIndexOf("."));
+            StorePath storePath = fastFileStorageClient.uploadFile(new FileInputStream(file), file.length(), fileExtName, mataData);
+            return storePath.getFullPath();
+        }catch (Exception exception){
+            throw new BusinessException(FASTDFS_UPLOAD_ERROR,exception);
+        }
+    }
 
     /**
      * 文件上传（带缩略图的）

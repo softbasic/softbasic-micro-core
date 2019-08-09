@@ -11,10 +11,12 @@ public enum MicroStatus implements IMicroStatus{
     REDIS_LOCK_WAIT_OVERTIME("00003","获取Redis锁超时"),
     FASTDFS_UPLOAD_ERROR("00004","文件上传错误"),
     FASTDFS_UPLOAD_NOT_IMAGE("00005","图片格式错误"),
+    FASTDFS_UPLOAD_DIR_ERROR("00006","不能上传文件夹"),
     UNAUTHORIZED("00401","未登录"),
     NO_PERMIT("00402","无权限"),
     LANDING_TIMEOUT("00403","登陆超时！"),
     USER_ID_IS_NULL("00403","登陆信息异常！")
+
 
     ;
 

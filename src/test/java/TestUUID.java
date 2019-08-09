@@ -10,4 +10,12 @@ public class TestUUID {
     public void test(){
         log.info(UUIDUtils.create());
     }
+
+    @Test
+    public void test1(){
+
+        String fileName = "xx.xlsx";
+        String fileExtName=fileName.substring(fileName.lastIndexOf("."));
+        System.out.println(fileExtName);
+    }
 }
