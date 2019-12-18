@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 
 public class BaseDao  {
-    @Autowired
+    @Autowired(required=false)
     protected MongoDao mongoDao;
-    @Autowired
+    @Autowired(required=false)
     protected RedisDao redisDao;
-    @Autowired
+    @Autowired(required=false)
     protected RocketDao rocketDao;
 }

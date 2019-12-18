@@ -3,12 +3,14 @@ package com.github.softbasic.micro.dao;
 import org.redisson.api.*;
 import org.redisson.config.Config;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 @Repository
+@ConditionalOnProperty(prefix="redisson",name = "enable", havingValue = "true")
 public class RedisDao {
     @Autowired
     private RedissonClient redissonClient;

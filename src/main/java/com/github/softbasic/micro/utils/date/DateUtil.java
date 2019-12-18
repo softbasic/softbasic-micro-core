@@ -767,4 +767,13 @@ public class DateUtil {
 
         return  first;
     }
+
+    /**
+     * 获取当前时间
+     * @param dateStyle
+     * @return
+     */
+    public static String current(DateStyle dateStyle){
+        return DateUtil.DateToString(new Date(),dateStyle);
+    }
 }

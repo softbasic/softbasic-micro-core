@@ -14,6 +14,7 @@ import java.util.List;
 @Data
 @Component
 @ConfigurationProperties(prefix = "spring.data.mongodb")
+@ConditionalOnProperty(prefix="spring.data.mongodb",name = "enable", havingValue = "true")
 public class MongoConfigProperties {
     private List<String> address;
     private String replicaSet;

@@ -1,6 +1,7 @@
 package com.github.softbasic.micro.config.redis;
 
 import lombok.Data;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 @PropertySource(value = "classpath:redisson.properties")
 @ConfigurationProperties(prefix = "redisson")
+@ConditionalOnProperty(prefix="redisson",name = "enable", havingValue = "true")
 @Data
 public class RedissonProperties {
     private int timeout;

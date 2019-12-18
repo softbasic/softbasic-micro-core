@@ -1,6 +1,7 @@
 package com.github.softbasic.micro.config.scheduling;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -12,6 +13,7 @@ import java.util.concurrent.Executors;
 
 @EnableScheduling
 @Configuration
+@ConditionalOnProperty(prefix="spring.task.scheduling",name = "enable", havingValue = "true")
 public class ScheduledConfig implements SchedulingConfigurer {
 
     @Value("${spring.task.scheduling.pool.size}")

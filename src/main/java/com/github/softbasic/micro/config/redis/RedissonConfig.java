@@ -8,6 +8,7 @@ import org.redisson.config.Config;
 import org.redisson.config.SingleServerConfig;
 import org.redisson.spring.cache.CacheConfig;
 import org.redisson.spring.cache.RedissonSpringCacheManager;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +22,7 @@ import java.util.Map;
 
 @Configuration
 @EnableCaching
+@ConditionalOnProperty(prefix="redisson",name = "enable", havingValue = "true")
 public class RedissonConfig {
 
     @Bean(destroyMethod = "shutdown")

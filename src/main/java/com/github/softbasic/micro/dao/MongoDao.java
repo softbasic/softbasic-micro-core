@@ -3,6 +3,7 @@ package com.github.softbasic.micro.dao;
 import com.github.softbasic.micro.model.BaseDto;
 import com.github.softbasic.micro.model.PageVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.query.Query;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
+@ConditionalOnProperty(prefix="spring.data.mongodb",name = "enable", havingValue = "true")
 public class MongoDao{
     @Autowired
     private MongoTemplate mongoSecondary;

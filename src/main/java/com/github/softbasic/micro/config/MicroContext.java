@@ -2,11 +2,6 @@ package com.github.softbasic.micro.config;
 
 import com.github.softbasic.micro.exception.BusinessException;
 import com.github.softbasic.micro.utils.BaseUtils;
-import org.springframework.context.ApplicationContext;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
 
 import static com.github.softbasic.micro.result.MicroStatus.UNAUTHORIZED;
 

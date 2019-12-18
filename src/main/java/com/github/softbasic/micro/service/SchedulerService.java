@@ -4,9 +4,11 @@ package com.github.softbasic.micro.service;
 import com.github.softbasic.micro.model.SchedulerModel;
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 @Service
+@ConditionalOnProperty(prefix="spring.task.scheduling",name = "enable", havingValue = "true")
 public class SchedulerService {
     // 任务调度
     @Autowired

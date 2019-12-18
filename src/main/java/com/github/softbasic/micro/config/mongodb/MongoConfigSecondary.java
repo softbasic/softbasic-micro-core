@@ -2,6 +2,7 @@ package com.github.softbasic.micro.config.mongodb;
 
 import com.mongodb.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.MongoDbFactory;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
+@ConditionalOnProperty(prefix="spring.data.mongodb",name = "enable", havingValue = "true")
 public class MongoConfigSecondary {
 
 

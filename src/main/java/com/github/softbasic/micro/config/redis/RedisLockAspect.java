@@ -12,6 +12,7 @@ import org.redisson.api.RedissonClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +24,7 @@ import static com.github.softbasic.micro.result.MicroStatus.REDIS_LOCK_WAIT_OVER
 @Component
 @Aspect
 @Order(-1)
+@ConditionalOnProperty(prefix="redisson",name = "enable", havingValue = "true")
 public class RedisLockAspect {
     private Logger logger = LoggerFactory.getLogger(getClass().getSimpleName());
 

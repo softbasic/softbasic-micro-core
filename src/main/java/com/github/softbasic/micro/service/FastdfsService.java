@@ -12,6 +12,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,6 +35,7 @@ import static com.github.softbasic.micro.result.MicroStatus.FASTDFS_UPLOAD_NOT_I
  * 文件上传服务
  */
 @Service
+@ConditionalOnProperty(prefix="fdfs",name = "enable", havingValue = "true")
 public class FastdfsService {
     private static Logger log = LoggerFactory.getLogger(FastdfsService.class);
 

@@ -6,7 +6,7 @@
 
     <groupId>com.github.softbasic</groupId>
     <artifactId>micro-core</artifactId>
-    <version>0.0.12-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -149,31 +149,31 @@
     </build>
 
     <repositories>
-        <repository>
-            <id>central</id>
-            <name>central</name>
-            <url>http://192.168.20.232:8081/repository/maven-public/</url>
-        </repository>
-    </repositories>
+    <repository>
+        <id>central</id>
+        <name>central</name>
+        <url>http://192.168.142.223:8081/repository/maven-public/</url>
+    </repository>
+</repositories>
 
 
     <pluginRepositories>
         <pluginRepository>
             <id>central</id>
-            <url>http://192.168.20.232:8081/repository/maven-public/</url>
+            <url>http://192.168.142.223:8081/repository/maven-public/</url>
         </pluginRepository>
     </pluginRepositories>
 
     <distributionManagement>
         <snapshotRepository>
             <id>architect</id>
-            <url>http://192.168.20.232:8081/repository/maven-architect/</url>
+            <url>http://192.168.142.223:8081/repository/maven-snapshots/</url>
 
         </snapshotRepository>
 
         <repository>
             <id>architect</id>
-            <url>http://192.168.20.232:8081/repository/maven-architect/</url>
+            <url>http://192.168.142.223:8081/repository/maven-snapshots/</url>
         </repository>
     </distributionManagement>
 
