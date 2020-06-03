@@ -1,6 +1,7 @@
 package com.github.softbasic.micro.exception;
 
 import com.github.softbasic.micro.result.IMicroStatus;
+import com.github.softbasic.micro.result.MicroStatus;
 import com.github.softbasic.micro.utils.StackTraceUtils;
 import com.github.softbasic.micro.utils.UUIDUtils;
 import lombok.Data;
@@ -45,7 +46,21 @@ public class BusinessException extends RuntimeException{
             this.microStatus=microStatus;
         }
     }
-
+    /**
+     * 传递底层异常堆栈
+     * @param exception
+     */
+    public BusinessException(Exception exception){
+        super(exception.getMessage());
+        this.errorLogId= UUIDUtils.create();
+        this.stackTraceMsg=getInfo(exception);
+        //如果捕获的是自定义异常，则类型定为源异常，否则使用捕获时异常
+        if(exception instanceof BusinessException){
+            this.microStatus=((BusinessException) exception).microStatus;
+        }else{
+            this.microStatus= MicroStatus.ERROR;
+        }
+    }
     /**
      * 获取异常的堆栈信息
      *

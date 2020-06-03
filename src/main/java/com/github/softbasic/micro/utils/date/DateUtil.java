@@ -2,7 +2,7 @@ package com.github.softbasic.micro.utils.date;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
-
+@Deprecated
 public class DateUtil {
 
     /**
@@ -371,7 +371,6 @@ public class DateUtil {
     /**
      * 增加日期的小时。失败返回null。
      * @param date 日期字符串
-     * @param dayAmount 增加数量。可为负数
      * @return 增加小时后的日期字符串
      */
     public static String addHour(String date, int hourAmount) {
@@ -381,7 +380,6 @@ public class DateUtil {
     /**
      * 增加日期的小时。失败返回null。
      * @param date 日期
-     * @param dayAmount 增加数量。可为负数
      * @return 增加小时后的日期
      */
     public static Date addHour(Date date, int hourAmount) {
@@ -391,7 +389,6 @@ public class DateUtil {
     /**
      * 增加日期的分钟。失败返回null。
      * @param date 日期字符串
-     * @param dayAmount 增加数量。可为负数
      * @return 增加分钟后的日期字符串
      */
     public static String addMinute(String date, int hourAmount) {
@@ -401,7 +398,6 @@ public class DateUtil {
     /**
      * 增加日期的分钟。失败返回null。
      * @param date 日期
-     * @param dayAmount 增加数量。可为负数
      * @return 增加分钟后的日期
      */
     public static Date addMinute(Date date, int hourAmount) {
@@ -411,7 +407,6 @@ public class DateUtil {
     /**
      * 增加日期的秒钟。失败返回null。
      * @param date 日期字符串
-     * @param dayAmount 增加数量。可为负数
      * @return 增加秒钟后的日期字符串
      */
     public static String addSecond(String date, int hourAmount) {
@@ -421,7 +416,6 @@ public class DateUtil {
     /**
      * 增加日期的秒钟。失败返回null。
      * @param date 日期
-     * @param dayAmount 增加数量。可为负数
      * @return 增加秒钟后的日期
      */
     public static Date addSecond(Date date, int hourAmount) {
@@ -776,4 +770,8 @@ public class DateUtil {
     public static String current(DateStyle dateStyle){
         return DateUtil.DateToString(new Date(),dateStyle);
     }
+
+
+
+
 }

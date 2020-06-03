@@ -7,12 +7,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.data.convert.ReadingConverter;
+import org.springframework.data.convert.WritingConverter;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.MongoTransactionManager;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
+import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
+import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
+import org.springframework.lang.NonNull;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Configuration
@@ -94,8 +102,43 @@ public class MongoConfigPrimary {
         return new MongoTransactionManager(mongoDbFactoryPrimary);
     }
 
+
+    // Direction: Java -> MongoDB
+    @WritingConverter
+    public class BigDecimalStringConverter implements Converter<BigDecimal, String> {
+        @Override
+        public String convert(BigDecimal source) {
+            return source.toPlainString();
+        }
+    }
+
+    // Direction: MongoDB -> Java
+    @ReadingConverter
+    public class StringBigDecimalConverter implements Converter<String, BigDecimal> {
+        @Override
+        public BigDecimal convert(String source) {
+            return new BigDecimal(source);
+        }
+    }
+
+    @Bean
+    public MongoCustomConversions customConversions() {
+        List<Converter> converterList = new ArrayList<Converter>();
+        converterList.add(new BigDecimalStringConverter());
+        converterList.add(new StringBigDecimalConverter());
+        return new MongoCustomConversions(converterList);
+    }
+
     @Bean
     MongoTemplate mongoPrimary(MongoDbFactory mongoDbFactoryPrimary){
-        return new MongoTemplate(mongoDbFactoryPrimary);
+        MongoTemplate mongoTemplate = new MongoTemplate(mongoDbFactoryPrimary);
+        MappingMongoConverter mongoMapping = (MappingMongoConverter) mongoTemplate.getConverter();
+        mongoMapping.setCustomConversions(customConversions()); // tell mongodb to use the custom converters
+        mongoMapping.afterPropertiesSet();
+        return mongoTemplate;
     }
+
+
+
+
 }

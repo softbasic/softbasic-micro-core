@@ -11,7 +11,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version> 2.1.4.RELEASE</version>
+        <version>2.1.4.RELEASE</version>
     </parent>
 
     <packaging>jar</packaging>
@@ -132,6 +132,12 @@
             </exclusions>
         </dependency>
 
+        <!--thymeleaf模版引擎-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -149,12 +155,12 @@
     </build>
 
     <repositories>
-    <repository>
-        <id>central</id>
-        <name>central</name>
-        <url>http://192.168.142.223:8081/repository/maven-public/</url>
-    </repository>
-</repositories>
+        <repository>
+            <id>central</id>
+            <name>central</name>
+            <url>http://192.168.142.223:8081/repository/maven-public/</url>
+        </repository>
+    </repositories>
 
 
     <pluginRepositories>
@@ -176,7 +182,6 @@
             <url>http://192.168.142.223:8081/repository/maven-snapshots/</url>
         </repository>
     </distributionManagement>
-
 
 
 </project>
