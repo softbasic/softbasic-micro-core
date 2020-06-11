@@ -1,6 +1,7 @@
 package com.github.softbasic.micro.config.mongodb;
 
 import com.mongodb.*;
+import org.bson.types.Decimal128;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,27 +106,27 @@ public class MongoConfigPrimary {
 
     // Direction: Java -> MongoDB
     @WritingConverter
-    public class BigDecimalStringConverter implements Converter<BigDecimal, String> {
+    public class BigDecimalToDecimal128Converter  implements Converter<BigDecimal, Decimal128> {
         @Override
-        public String convert(BigDecimal source) {
-            return source.toPlainString();
+        public Decimal128  convert(BigDecimal source) {
+            return new Decimal128(source);
         }
     }
 
     // Direction: MongoDB -> Java
     @ReadingConverter
-    public class StringBigDecimalConverter implements Converter<String, BigDecimal> {
+    public class Decimal128ToBigDecimalConverter  implements Converter<Decimal128, BigDecimal> {
         @Override
-        public BigDecimal convert(String source) {
-            return new BigDecimal(source);
+        public BigDecimal convert(Decimal128  source) {
+            return source.bigDecimalValue();
         }
     }
 
     @Bean
     public MongoCustomConversions customConversions() {
         List<Converter> converterList = new ArrayList<Converter>();
-        converterList.add(new BigDecimalStringConverter());
-        converterList.add(new StringBigDecimalConverter());
+        converterList.add(new BigDecimalToDecimal128Converter());
+        converterList.add(new Decimal128ToBigDecimalConverter());
         return new MongoCustomConversions(converterList);
     }
 
