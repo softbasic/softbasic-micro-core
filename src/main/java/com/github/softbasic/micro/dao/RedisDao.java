@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 @Repository
 @ConditionalOnProperty(prefix="redisson",name = "enable", havingValue = "true")
 public class RedisDao {
-    @Autowired
+    @Autowired(required=false)
     private RedissonClient redissonClient;
 
     public RedissonClient redissonClient(){

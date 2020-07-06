@@ -14,9 +14,9 @@ import java.util.List;
 @Repository
 @ConditionalOnProperty(prefix="spring.data.mongodb",name = "enable", havingValue = "true")
 public class MongoDao{
-    @Autowired
+    @Autowired(required=false)
     private MongoTemplate mongoSecondary;
-    @Autowired
+    @Autowired(required=false)
     private MongoTemplate mongoPrimary;
 
     public MongoTemplate primary() {

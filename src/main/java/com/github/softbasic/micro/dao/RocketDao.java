@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 @ConditionalOnProperty(prefix="rocketmq.enable",name = "enable", havingValue = "true")
 public class RocketDao {
-    @Autowired
+    @Autowired(required=false)
     private RocketMQTemplate rocketMQTemplate;
 
     public RocketMQTemplate rocketMQTemplate() {
