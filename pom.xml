@@ -7,7 +7,7 @@
 
     <groupId>com.github.softbasic</groupId>
     <artifactId>micro-core</artifactId>
-    <version>1.0.0.RELEASE</version>
+    <version>1.0.1.RELEASE</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
