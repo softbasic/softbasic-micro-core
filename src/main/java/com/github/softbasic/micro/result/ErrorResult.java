@@ -12,4 +12,7 @@ public class ErrorResult extends MicroResult{
     public ErrorResult(String data) {
         super(false,MicroStatus.ERROR, data);
     }
+    public ErrorResult(MicroStatus microStatus,String data) {
+        super(false,microStatus, data);
+    }
 }

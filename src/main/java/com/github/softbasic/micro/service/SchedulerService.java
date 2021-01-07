@@ -7,23 +7,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
+import java.util.TimeZone;
+
 @Service
-@ConditionalOnProperty(prefix="spring.task.scheduling",name = "enable", havingValue = "true")
+@ConditionalOnProperty(prefix = "spring.task.scheduling", name = "enable", havingValue = "true")
 public class SchedulerService {
     // 任务调度
     @Autowired
     private Scheduler scheduler;
-    private final static String JOB_DEFAULT_GROUP="JOB_DEFAULT_GROUP";
-    private final static String TRIGGER_DEFAULT_GROUP="TRIGGER_DEFAULT_GROUP";
-    private final static String TRIGGER="Trigger";
+    private final static String JOB_DEFAULT_GROUP = "JOB_DEFAULT_GROUP";
+    private final static String TRIGGER_DEFAULT_GROUP = "TRIGGER_DEFAULT_GROUP";
+    private final static String TRIGGER = "Trigger";
 
     /**
      * 启动一个定时任务
+     *
      * @param schedulerModel
      * @throws Exception
      */
     public void startJob(SchedulerModel schedulerModel) throws Exception {
-
         Class<Job> jobClass = (Class<Job>) Class.forName(schedulerModel.getJobClassName());
         JobDataMap jobDataMap = new JobDataMap();
         jobDataMap.put("schedulerModel", schedulerModel);
@@ -32,22 +34,32 @@ public class SchedulerService {
                 .setJobData(jobDataMap)
                 .build();
         CronTrigger cronTrigger = TriggerBuilder.newTrigger()
-                .withIdentity(schedulerModel.getJobName()+TRIGGER, TRIGGER_DEFAULT_GROUP)
+                .withIdentity(schedulerModel.getJobName() + TRIGGER, TRIGGER_DEFAULT_GROUP)
                 .withSchedule(CronScheduleBuilder.cronSchedule(schedulerModel.getCron()))
                 .build();
         scheduler.scheduleJob(jobDetail, cronTrigger);
-
-/*        LocalDateTime localDateTime = message.getLocalDateTime();
-        LocalDateTime now = LocalDateTime.now();
-        //当前时间<=任务时间
-        if(now.isBefore(localDateTime) || now.isEqual(localDateTime)){
-            //时间转换为cron表达式
-            String cron = timeUtil.localDateTimeToCron(message.getLocalDateTime());
-            System.out.println("cron = " + cron);
-
-        }*/
     }
 
+    /**
+     * 启动一个定时任务
+     *
+     * @param schedulerModel
+     * @throws Exception
+     */
+    public void startJob(SchedulerModel schedulerModel, TimeZone timeZone) throws Exception {
+        Class<Job> jobClass = (Class<Job>) Class.forName(schedulerModel.getJobClassName());
+        JobDataMap jobDataMap = new JobDataMap();
+        jobDataMap.put("schedulerModel", schedulerModel);
+        JobDetail jobDetail = JobBuilder.newJob(jobClass)
+                .withIdentity(schedulerModel.getJobName(), JOB_DEFAULT_GROUP)
+                .setJobData(jobDataMap)
+                .build();
+        CronTrigger cronTrigger = TriggerBuilder.newTrigger()
+                .withIdentity(schedulerModel.getJobName() + TRIGGER, TRIGGER_DEFAULT_GROUP)
+                .withSchedule(CronScheduleBuilder.cronSchedule(schedulerModel.getCron()).inTimeZone(timeZone))
+                .build();
+        scheduler.scheduleJob(jobDetail, cronTrigger);
+    }
 
 
     /**
@@ -58,7 +70,7 @@ public class SchedulerService {
      * @throws Exception
      */
     public String getJobInfo(SchedulerModel schedulerModel) throws Exception {
-        TriggerKey triggerKey = new TriggerKey(schedulerModel.getJobName()+TRIGGER, TRIGGER_DEFAULT_GROUP);
+        TriggerKey triggerKey = new TriggerKey(schedulerModel.getJobName() + TRIGGER, TRIGGER_DEFAULT_GROUP);
         CronTrigger cronTrigger = (CronTrigger) scheduler.getTrigger(triggerKey);
         return String.format("time:%s,state:%s", cronTrigger.getCronExpression(),
                 scheduler.getTriggerState(triggerKey).name());
@@ -72,16 +84,16 @@ public class SchedulerService {
      * @throws Exception
      */
     public boolean modifyJob(SchedulerModel schedulerModel) throws Exception {
-        TriggerKey triggerKey = new TriggerKey(schedulerModel.getJobName()+TRIGGER, TRIGGER_DEFAULT_GROUP);
+        TriggerKey triggerKey = new TriggerKey(schedulerModel.getJobName() + TRIGGER, TRIGGER_DEFAULT_GROUP);
         CronTrigger cronTrigger = (CronTrigger) scheduler.getTrigger(triggerKey);
         String oldTime = cronTrigger.getCronExpression();
         if (!oldTime.equalsIgnoreCase(schedulerModel.getCron())) {
             CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule(schedulerModel.getCron());
             CronTrigger trigger = TriggerBuilder.newTrigger()
-                    .withIdentity(schedulerModel.getJobName()+TRIGGER, TRIGGER_DEFAULT_GROUP)
+                    .withIdentity(schedulerModel.getJobName() + TRIGGER, TRIGGER_DEFAULT_GROUP)
                     .withSchedule(cronScheduleBuilder)
                     .build();
-            return scheduler.rescheduleJob(triggerKey, trigger)!=null;
+            return scheduler.rescheduleJob(triggerKey, trigger) != null;
         }
         return false;
     }
