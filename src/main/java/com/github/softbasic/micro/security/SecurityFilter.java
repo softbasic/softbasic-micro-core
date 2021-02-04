@@ -46,7 +46,7 @@ public class SecurityFilter implements Filter {
         if (this.auth != null && this.auth) {
             ISecurityCacheDao securityCacheDao = (SecurityCacheDao) SpringContextUtils.getBean("securityCacheDao");
 
-            String token = request.getHeader("v");
+            String token = request.getHeader("t");
             /*
              * 如果token验证不通过，则抛401异常
              * filter在controller之前，所以，自定义异常，ExceptionController接收不到
