@@ -46,7 +46,7 @@ public class RedissonConfig {
     @Bean
     CacheManager redissonCacheManager(RedissonClient redissonClient, RedissonProperties redssionProperties) {
         RedissonProperties.RedissonCache redissonCache = redssionProperties.getRedissonCache();
-        String cacheConfigs = redissonCache.getCacheConfigs()==null?"secure:userInfo&2592000000,secure:interfaceAuth&315360000000,secure:interfaceVersion&315360000000":redissonCache.getCacheConfigs()+",secure:userInfo&2592000000,secure:interfaceAuth&315360000000,secure:interfaceVersion&315360000000";
+        String cacheConfigs = redissonCache.getCacheConfigs()==null?"secure:userInfo&1800000":redissonCache.getCacheConfigs()+",secure:userInfo&1800000";
         Map<String, CacheConfig> configMap = new HashMap<>();
         if(!cacheConfigs.trim().equals("".trim())){
             //如果有缓存配置，则逐个加入到管理器

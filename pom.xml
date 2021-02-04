@@ -4,10 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-
     <groupId>com.github.softbasic</groupId>
     <artifactId>micro-core</artifactId>
-    <version>1.0.1.RELEASE</version>
+    <version>1.0.3-SNAPSHOT</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -20,9 +19,6 @@
     <name>micro-core</name>
 
     <properties>
-        <java.version>1.8</java.version>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -141,117 +137,37 @@
 
     </dependencies>
 
-    <developers>
-        <developer>
-            <name>师爷</name>
-            <email>lcr_rcl@163.com</email>
-        </developer>
-        <developer>
-            <name>张公子</name>
-            <email>z0710420116@163.com</email>
-        </developer>
-        <developer>
-            <name>卡卡</name>
-            <email>zhuzixuan89@126.com</email>
-        </developer>
-        <developer>
-            <name>joker</name>
-            <email>mmfly01@163.com</email>
-        </developer>
-        <developer>
-            <name>卓上</name>
-            <email>15620597118@163.com</email>
-        </developer>
-    </developers>
+    <repositories>
+        <repository>
+            <id>central</id>
+            <name>central</name>
+            <url>http://192.168.20.232:8081/repository/maven-public/</url>
+        </repository>
+    </repositories>
 
-    <scm>
-        <url>https://github.com/softbasic/micro-core</url>
-        <connection>scm:git:https://github.com/softbasic/micro-core.git</connection>
-    </scm>
-
-    <licenses>
-        <license>
-            <name>Apache 2</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-            <distribution>repo</distribution>
-            <comments>A business-friendly OSS license</comments>
-        </license>
-    </licenses>
-
-    <build>
-        <plugins>
-            <!--生成Source jar文件-->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>2.2.1</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar-no-fork</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <!--生成Javadoc，关闭doclint,避免注解检查不通过-->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9.1</version>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                        <configuration>
-                            <additionalparam>-Xdoclint:none</additionalparam>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <!--Maven GPG插件用于使用以下配置对组件进行签名-->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.5</version>
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <!--Nexus Staging Maven插件是将组件部署到OSS并将其发布到Central Repository的推荐方法-->
-            <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.6.8</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <serverId>oss</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-
-    <distributionManagement>
-
+    <!--<distributionManagement>
         <snapshotRepository>
-            <id>oss</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+            <id>architect</id>
+            <url>http://192.168.20.232:8081/repository/maven-public/</url>
 
         </snapshotRepository>
 
         <repository>
-            <id>oss</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+            <id>architect</id>
+            <url>http://192.168.20.232:8081/repository/maven-public/</url>
+        </repository>
+    </distributionManagement>-->
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>architect</id>
+            <url>http://192.144.239.137:8081/repository/maven-snapshots/</url>
+
+        </snapshotRepository>
+
+        <repository>
+            <id>architect</id>
+            <url>http://192.144.239.137:8081/repository/maven-releases/</url>
         </repository>
     </distributionManagement>
 
