@@ -49,6 +49,7 @@ public class SecurityFilter implements Filter {
         if (this.auth != null && this.auth) {
             String path = request.getRequestURI();
             String[] excludes = StringUtils.isEmpty(this.exclude)?new String[0]:this.exclude.contains(",")?this.exclude.split(","):new String[]{this.exclude};
+
             for(String p : excludes){
                 if(path.contains(p)){
                     chain.doFilter(request, response);
