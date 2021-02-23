@@ -58,6 +58,7 @@ public class SecurityFilter implements Filter {
             }
 
 
+
             ISecurityCacheDao securityCacheDao = (SecurityCacheDao) SpringContextUtils.getBean("securityCacheDao");
 
             String token = request.getHeader("t");
