@@ -9,6 +9,7 @@ import com.github.softbasic.micro.result.MicroResult;
 import com.github.softbasic.micro.result.MicroStatus;
 import com.github.softbasic.micro.utils.BaseUtils;
 import com.github.softbasic.micro.utils.SpringContextUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,8 @@ public class SecurityFilter implements Filter {
      */
     private Boolean auth;
 
+    private String exclude;
+
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain) throws IOException, ServletException {
 
@@ -44,6 +47,14 @@ public class SecurityFilter implements Filter {
 
         //如果需要安全验证
         if (this.auth != null && this.auth) {
+            String path = request.getRequestURI();
+            String[] excludes = StringUtils.isEmpty(this.exclude)?new String[0]:this.exclude.contains(",")?this.exclude.split(","):new String[]{this.exclude};
+            for(String p : excludes){
+                if(path.contains(p)){
+                    chain.doFilter(request, response);
+                    return;
+                }
+            }
             ISecurityCacheDao securityCacheDao = (SecurityCacheDao) SpringContextUtils.getBean("securityCacheDao");
 
             String token = request.getHeader("t");
@@ -84,11 +95,13 @@ public class SecurityFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         String authParam = filterConfig.getInitParameter("auth");
+        String excludeParam = filterConfig.getInitParameter("exclude");
         if (BaseUtils.isBlank(authParam)) {
             this.auth = false;
         } else {
             this.auth = Boolean.parseBoolean(authParam);
         }
+        this.exclude = excludeParam;
     }
 
     public void destroy() {

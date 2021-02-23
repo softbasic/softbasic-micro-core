@@ -24,6 +24,9 @@ public class MicroMvcConfigurer implements WebMvcConfigurer {
     @Value("${micro.auth}")
     private Boolean auth;
 
+    @Value("${micro.exclude}")
+    private String exclude;
+
     /**
      * 配置fastJson消息处理器
      *
@@ -51,6 +54,7 @@ public class MicroMvcConfigurer implements WebMvcConfigurer {
         FilterRegistrationBean registration = new FilterRegistrationBean();
         registration.setFilter(new SecurityFilter());
         registration.addInitParameter("auth", auth+"");
+        registration.addInitParameter("exclude",exclude+"");
         registration.addUrlPatterns(new String[]{"/*"});
         registration.setOrder(100);
         return registration;
