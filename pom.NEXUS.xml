@@ -139,22 +139,29 @@
 
     <repositories>
         <repository>
-            <id>central</id>
-            <name>central</name>
-            <url>http://192.168.20.232:8081/repository/maven-public/</url>
+            <id>softbasic</id>
+            <url>http://repository.softbasic.org</url>
         </repository>
     </repositories>
 
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>softbasic</id>
+            <url>http://repository.softbasic.org</url>
+        </pluginRepository>
+    </pluginRepositories>
+
     <distributionManagement>
         <snapshotRepository>
-            <id>architect</id>
-            <url>http://192.168.20.232:8081/repository/maven-public/</url>
+            <id>softbasic</id>
+            <url>http://snapshots.repository.softbasic.org</url>
 
         </snapshotRepository>
 
         <repository>
-            <id>architect</id>
-            <url>http://192.168.20.232:8081/repository/maven-public/</url>
+            <id>softbasic</id>
+            <url>http://releases.repository.softbasic.org</url>
         </repository>
     </distributionManagement>
 
