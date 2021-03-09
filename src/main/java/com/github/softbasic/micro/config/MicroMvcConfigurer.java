@@ -66,7 +66,13 @@ public class MicroMvcConfigurer implements WebMvcConfigurer {
      */
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**").allowedOrigins(new String[]{"*"}).allowCredentials(true).allowedMethods(new String[]{"GET", "POST", "DELETE", "PUT"}).maxAge(3600L);
+        //registry.addMapping("/**").allowedOrigins(new String[]{"*"}).allowCredentials(true).allowedMethods(new String[]{"GET", "POST", "DELETE", "PUT"}).maxAge(3600L);
+        //registry.addMapping("/**").allowedOrigins("*").allowCredentials(true).allowedMethods(new String[]{"GET", "POST", "DELETE", "PUT"}).exposedHeaders("Access-Control-Allow-Origin").maxAge(3600L);
+        registry.addMapping("/**")
+                .allowedOrigins("*").allowCredentials(true)
+                .allowedMethods(new String[]{"GET", "POST", "DELETE", "PUT"})
+                .allowedHeaders("*")
+                .maxAge(3600L);
     }
 
 

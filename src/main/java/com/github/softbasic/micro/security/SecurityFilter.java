@@ -69,6 +69,11 @@ public class SecurityFilter implements Filter {
             if (BaseUtils.isBlank(token)) {
                 log.error("请求: " + request.getRequestURI() + "用户尚未登陆！");
                 MicroResult microResult = new MicroResult(false, MicroStatus.UNAUTHORIZED);
+                response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
+                response.setHeader("Access-Control-Allow-Methods", "*");
+                response.setHeader("Access-Control-Allow-Headers", "*");
+                response.setHeader("Access-Control-Max-Age", "3600");
+                response.setHeader("Access-Control-Allow-Credentials", "true");
                 response.setStatus(HttpStatus.OK.value());
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
@@ -81,6 +86,11 @@ public class SecurityFilter implements Filter {
             if (userInfo == null) {
                 log.error("请求: " + request.getRequestURI() + "登陆已超时！");
                 MicroResult microResult = new MicroResult(false, MicroStatus.LANDING_TIMEOUT);
+                response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
+                response.setHeader("Access-Control-Allow-Methods", "*");
+                response.setHeader("Access-Control-Allow-Headers", "*");
+                response.setHeader("Access-Control-Max-Age", "3600");
+                response.setHeader("Access-Control-Allow-Credentials", "true");
                 response.setStatus(HttpStatus.OK.value());
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
