@@ -71,7 +71,8 @@ public class MicroMvcConfigurer implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOrigins("*").allowCredentials(true)
                 .allowedMethods(new String[]{"GET", "POST", "DELETE", "PUT"})
-                .allowedHeaders("*")
+                .allowedHeaders(new String[]{"Access-Control-Allow-Headers",
+                        "Origin", "No-Cache", "X-Requested-With", "If-Modified-Since", "Pragma", "Last-Modified", "Cache-Control", "Expires", "Content-Type", "X-E4M-With","t","d"})
                 .maxAge(3600L);
     }
 
