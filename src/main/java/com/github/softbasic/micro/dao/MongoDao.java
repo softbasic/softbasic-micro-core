@@ -2,6 +2,7 @@ package com.github.softbasic.micro.dao;
 
 import com.github.softbasic.micro.model.BaseDto;
 import com.github.softbasic.micro.model.PageVO;
+import com.mongodb.client.MongoClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -23,16 +24,22 @@ public class MongoDao{
     @Autowired(required=false)
     private MongoTemplate mongoPrimary;
 
+    @Autowired
+    private MongoClient mongoClientPrimary;
+    @Autowired
+    private MongoClient mongoClientSecondary;
+
     public MongoTemplate primary() {
-        return mongoPrimary;
+        return mongoPrimary.withSession(mongoClientPrimary.startSession());
     }
 
     /**
      * 子系统中很多地方写法不规范，读写分离导致的延迟数据有问题，暂时全部改为主节点
+     * 这里 mongoPrimary和mongoClientPrimary要对应，负责查询报：state should be: ClientSession from same MongoClient 错误
      * @return
      */
     public MongoTemplate secondary() {
-        return mongoPrimary;
+        return mongoPrimary.withSession(mongoClientPrimary.startSession());
     }
 
     /**
@@ -132,7 +139,7 @@ public class MongoDao{
     /**
      * 副节点聚合分页查询
      * @param resultClass
-     * @param query
+     * @param operations
      * @param pageNo
      * @param pageSize
      * @param collectionName
