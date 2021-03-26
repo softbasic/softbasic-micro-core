@@ -33,12 +33,9 @@ public class MongoConfigPrimary {
 
     private static final Logger logger = LoggerFactory.getLogger(MongoConfigPrimary.class);
 
-    // 覆盖容器中默认的MongoDbFactory Bean
     @Bean
     @Autowired
-    @Primary
-    public MongoDatabaseFactory mongoDbFactoryPrimary(MongoConfigProperties properties) {
-
+    public MongoClient mongoClientPrimary(MongoConfigProperties properties) {
         //获取mongodb地址
         List<ServerAddress> serverAddresses = new ArrayList<ServerAddress>();
         for (String address : properties.getAddress()) {
@@ -89,6 +86,15 @@ public class MongoConfigPrimary {
                         .build());
 
         // 创建MongoDbFactory
+        return mongoClientPrimary;
+    }
+
+    // 覆盖容器中默认的MongoDbFactory Bean
+    @Bean
+    @Autowired
+    @Primary
+    public MongoDatabaseFactory mongoDbFactoryPrimary(MongoClient mongoClientPrimary,MongoConfigProperties properties) {
+        // 创建MongoDbFactory
         return new SimpleMongoClientDatabaseFactory(mongoClientPrimary, properties.getDatabase());
     }
 
@@ -98,7 +104,14 @@ public class MongoConfigPrimary {
      */
     @Bean
     MongoTransactionManager transactionManagerPrimary(MongoDatabaseFactory mongoDatabaseFactoryPrimary) {
-        return new MongoTransactionManager(mongoDatabaseFactoryPrimary);
+        MongoTransactionManager mongoTransactionManager = new MongoTransactionManager(mongoDatabaseFactoryPrimary);
+        TransactionOptions options = TransactionOptions.builder()
+                .writeConcern(WriteConcern.MAJORITY)
+                .readConcern(ReadConcern.LOCAL)
+                .readPreference(ReadPreference.primary()).build();
+        mongoTransactionManager.setOptions(options);
+        mongoTransactionManager.setDefaultTimeout(3000);
+        return mongoTransactionManager;
     }
 
 

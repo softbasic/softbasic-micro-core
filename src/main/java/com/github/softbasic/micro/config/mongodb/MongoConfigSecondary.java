@@ -21,11 +21,10 @@ import java.util.concurrent.TimeUnit;
 @ConditionalOnProperty(prefix="spring.data.mongodb",name = "enable", havingValue = "true")
 public class MongoConfigSecondary {
 
-
-    // 覆盖容器中默认的MongoDbFactory Bean
+    // mongoClient
     @Bean
     @Autowired
-    public MongoDatabaseFactory mongoDbFactorySecondary(MongoConfigProperties properties) {
+    public MongoClient mongoClientSecondary(MongoConfigProperties properties) {
 
         //获取mongodb地址
         List<ServerAddress> serverAddresses = new ArrayList<ServerAddress>();
@@ -47,7 +46,7 @@ public class MongoConfigSecondary {
         }
 
         //设置mongo连接
-        MongoClient mongoClientPrimary = MongoClients.create(
+        MongoClient mongoClientSecondary = MongoClients.create(
                 MongoClientSettings.builder()
                         .applyToClusterSettings(clusterBuilder ->
                                 clusterBuilder.serverSelectionTimeout(properties.getServerSelectionTimeout(), TimeUnit.SECONDS)
@@ -77,7 +76,16 @@ public class MongoConfigSecondary {
                         .build());
 
         // 创建MongoDbFactory
-        return new SimpleMongoClientDatabaseFactory(mongoClientPrimary, properties.getDatabase());
+        return mongoClientSecondary;
+    }
+
+
+    // 覆盖容器中默认的MongoDbFactory Bean
+    @Bean
+    @Autowired
+    public MongoDatabaseFactory mongoDbFactorySecondary(MongoClient mongoClientSecondary,MongoConfigProperties properties) {
+        // 创建MongoDbFactory
+        return new SimpleMongoClientDatabaseFactory(mongoClientSecondary,properties.getDatabase());
     }
 
     @Bean
