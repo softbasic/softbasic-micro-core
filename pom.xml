@@ -6,7 +6,7 @@
 
     <groupId>com.github.softbasic</groupId>
     <artifactId>micro-core</artifactId>
-    <version>2.0.3-SNAPSHOT</version>
+    <version>2.0.6-SNAPSHOT</version> <!-- 2.0.3 -->
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -77,7 +77,7 @@
         <dependency>
             <groupId>org.apache.rocketmq</groupId>
             <artifactId>rocketmq-spring-boot-starter</artifactId>
-            <version>2.0.2</version>
+            <version>2.2.0</version>
             <exclusions>
                 <exclusion>
                     <artifactId>fastjson</artifactId>
@@ -112,9 +112,9 @@
 
         <!--fastdfs客户端-->
         <dependency>
-            <groupId>com.github.tobato</groupId>
-            <artifactId>fastdfs-client</artifactId>
-            <version>1.26.2</version>
+            <groupId>org.csource</groupId>
+            <artifactId>fastdfs-client-java</artifactId>
+            <version>1.29-SNAPSHOT</version>
         </dependency>
 
         <!--测试 -->
@@ -136,31 +136,15 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.7</version>
         </dependency>
 
     </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <excludes>
-                        <exclude>
-                            <groupId>org.springframework.boot</groupId>
-                            <artifactId>spring-boot-configuration-processor</artifactId>
-                        </exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-
     <repositories>
+
         <!--<repository>
             <id>softbasic</id>
             <url>http://repository.softbasic.org</url>
@@ -169,10 +153,10 @@
 
 
     <pluginRepositories>
-        <pluginRepository>
+        <!--<pluginRepository>
             <id>softbasic</id>
             <url>http://repository.softbasic.org</url>
-        </pluginRepository>
+        </pluginRepository>-->
     </pluginRepositories>
 
     <distributionManagement>

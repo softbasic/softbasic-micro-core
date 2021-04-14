@@ -18,6 +18,10 @@ public class RedissonProperties {
 
     private String address;
 
+    private String master;
+
+    private String slaves;
+
     private String password;
 
     private int connectionPoolSize;

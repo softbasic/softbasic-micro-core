@@ -2,31 +2,22 @@ package com.github.softbasic.micro.service;
 
 
 import com.github.softbasic.micro.exception.BusinessException;
+import com.github.softbasic.micro.model.FastdfsFile;
 import com.github.softbasic.micro.model.ImageInfoModel;
-import com.github.softbasic.micro.result.MicroStatus;
-import com.github.tobato.fastdfs.domain.MataData;
-import com.github.tobato.fastdfs.domain.StorePath;
-import com.github.tobato.fastdfs.service.FastFileStorageClient;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
+import org.csource.common.NameValuePair;
+import org.csource.fastdfs.StorageClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.nio.channels.FileChannel;
-import java.util.HashSet;
-import java.util.Set;
 
 import static com.github.softbasic.micro.result.MicroStatus.FASTDFS_UPLOAD_ERROR;
 import static com.github.softbasic.micro.result.MicroStatus.FASTDFS_UPLOAD_NOT_IMAGE;
@@ -35,12 +26,20 @@ import static com.github.softbasic.micro.result.MicroStatus.FASTDFS_UPLOAD_NOT_I
  * 文件上传服务
  */
 @Service
-@ConditionalOnProperty(prefix="fdfs",name = "enable", havingValue = "true")
+@ConditionalOnProperty(prefix="fastdfs",name = "enable", havingValue = "true")
 public class FastdfsService {
     private static Logger log = LoggerFactory.getLogger(FastdfsService.class);
 
-    @Autowired
-    private FastFileStorageClient fastFileStorageClient;
+    @Autowired(required = false)
+    private StorageClient storageClient;
+
+    public String upload(FastdfsFile fastDFSFile) throws Exception{
+        //文件属性信息
+        NameValuePair[] meta_list = new NameValuePair[1];
+        meta_list[0] = new NameValuePair("author", fastDFSFile.getAuthor());
+        String[] uploadResults = storageClient.upload_file(fastDFSFile.getContent(), fastDFSFile.getExt(), meta_list);
+        return uploadResults[0]+"/"+uploadResults[1];
+    }
 
     /**
      * 上传文件
@@ -49,11 +48,9 @@ public class FastdfsService {
      */
     public String upload(MultipartFile file){
         try {
-            // 设置文件信息
-            Set<MataData> mataData = new HashSet<>();
-            // 上传   （文件上传可不填文件信息，填入null即可）
-            StorePath storePath = fastFileStorageClient.uploadFile(file.getInputStream(), file.getSize(), FilenameUtils.getExtension(file.getOriginalFilename()), mataData);
-            return storePath.getFullPath();
+            FastdfsFile fastDFSFile = new FastdfsFile(file);
+            String fullPath = upload(fastDFSFile);
+            return fullPath;
         }catch (Exception exception){
             throw new BusinessException(FASTDFS_UPLOAD_ERROR,exception);
         }
@@ -64,7 +61,7 @@ public class FastdfsService {
      * @param inputStream
      * @return 文件路径，例如："group1/M00/00/00/wKgU6Vy4G6-AZEaJAAAnQiwQQ-E39.xlsx"
      */
-    @Deprecated
+    /*@Deprecated
     public String upload(InputStream inputStream){
         try {
             // 设置文件信息
@@ -75,19 +72,17 @@ public class FastdfsService {
         }catch (Exception exception){
             throw new BusinessException(FASTDFS_UPLOAD_ERROR,exception);
         }
-    }
+    }*/
     /**
      * 上传文件
      * @param inputStream
      * @return 文件路径，例如："group1/M00/00/00/wKgU6Vy4G6-AZEaJAAAnQiwQQ-E39.xlsx"
      */
-    public String upload(InputStream inputStream,String fileExtName){
+    public String upload(InputStream inputStream,String fileName){
         try {
-            // 设置文件信息
-            Set<MataData> mataData = new HashSet<>();
-            // 上传   （文件上传可不填文件信息，填入null即可）
-            StorePath storePath = fastFileStorageClient.uploadFile(inputStream, inputStream.available(), fileExtName, mataData);
-            return storePath.getFullPath();
+            FastdfsFile fastDFSFile = new FastdfsFile(inputStream,fileName);
+            String fullPath = upload(fastDFSFile);
+            return fullPath;
         }catch (Exception exception){
             throw new BusinessException(FASTDFS_UPLOAD_ERROR,exception);
         }
@@ -98,17 +93,10 @@ public class FastdfsService {
      * @return 文件路径，例如："group1/M00/00/00/wKgU6Vy4G6-AZEaJAAAnQiwQQ-E39.xlsx"
      */
     public String upload(File file){
-
         try {
-            // 设置文件信息
-            Set<MataData> mataData = new HashSet<>();
-            if(file.isDirectory()){
-                throw new BusinessException(MicroStatus.FASTDFS_UPLOAD_DIR_ERROR);
-            }
-            String fileName = file.getName();
-            String fileExtName=fileName.substring(fileName.lastIndexOf("."));
-            StorePath storePath = fastFileStorageClient.uploadFile(new FileInputStream(file), file.length(), fileExtName, mataData);
-            return storePath.getFullPath();
+            FastdfsFile fastDFSFile = new FastdfsFile(file);
+            String fullPath = upload(fastDFSFile);
+            return fullPath;
         }catch (Exception exception){
             throw new BusinessException(FASTDFS_UPLOAD_ERROR,exception);
         }
