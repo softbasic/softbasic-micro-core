@@ -5,6 +5,7 @@ import org.redisson.api.RedissonClient;
 import org.redisson.codec.JsonJacksonCodec;
 import org.redisson.codec.SerializationCodec;
 import org.redisson.config.Config;
+import org.redisson.config.MasterSlaveServersConfig;
 import org.redisson.config.SingleServerConfig;
 import org.redisson.spring.cache.CacheConfig;
 import org.redisson.spring.cache.RedissonSpringCacheManager;
@@ -28,16 +29,32 @@ public class RedissonConfig {
     @Bean(destroyMethod = "shutdown")
     RedissonClient redissonClient(RedissonProperties redssionProperties) {
         Config config = new Config().setCodec(new JsonJacksonCodec());
-        SingleServerConfig singleServerConfig = config.useSingleServer()
+
+        MasterSlaveServersConfig masterSlaveServersConfig = config.useMasterSlaveServers()
+                .setMasterAddress(redssionProperties.getMaster())
+                .addSlaveAddress(redssionProperties.getSlaves().split(","))
+                .setConnectTimeout(redssionProperties.getConnectTimeout())
+                .setTimeout(redssionProperties.getTimeout())
+                .setMasterConnectionPoolSize(redssionProperties.getConnectionPoolSize())
+                .setSlaveConnectionPoolSize(redssionProperties.getConnectionPoolSize())
+                .setMasterConnectionMinimumIdleSize(redssionProperties.getConnectionMinimumIdleSize())
+                .setSlaveConnectionMinimumIdleSize(redssionProperties.getConnectionMinimumIdleSize())
+                .setRetryAttempts(redssionProperties.getRetryAttempts())
+                .setRetryInterval(redssionProperties.getRetryInterval());
+
+
+        /*SingleServerConfig singleServerConfig = config.useSingleServer()
                 .setAddress(redssionProperties.getAddress())//连接地址
                 .setConnectTimeout(redssionProperties.getConnectTimeout())//连接超时
                 .setTimeout(redssionProperties.getTimeout())//Redis服务器响应超时
                 .setConnectionPoolSize(redssionProperties.getConnectionPoolSize())//Redis连接的最大池大小
                 .setConnectionMinimumIdleSize(redssionProperties.getConnectionMinimumIdleSize())//最小空闲Redis连接量
                 .setRetryAttempts(redssionProperties.getRetryAttempts())//命令失败重试次数
-                .setRetryInterval(redssionProperties.getRetryInterval());//命令重试发送时间间隔
+                .setRetryInterval(redssionProperties.getRetryInterval());//命令重试发送时间间隔*/
+
         if (!StringUtils.isEmpty(redssionProperties.getPassword())) {
-            singleServerConfig.setPassword(redssionProperties.getPassword());
+            //singleServerConfig.setPassword(redssionProperties.getPassword());
+            masterSlaveServersConfig.setPassword(redssionProperties.getPassword());
         }
         return Redisson.create(config);
     }

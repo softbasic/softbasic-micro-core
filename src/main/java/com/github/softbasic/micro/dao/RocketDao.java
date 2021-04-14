@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository
-@ConditionalOnProperty(prefix="rocketmq.enable",name = "enable", havingValue = "true")
+@ConditionalOnProperty(prefix="rocketmq",name = "enable", havingValue = "true")
 public class RocketDao {
     @Autowired(required=false)
     private RocketMQTemplate rocketMQTemplate;

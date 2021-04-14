@@ -61,10 +61,9 @@ public class MongoConfigPrimary {
                         .applyToClusterSettings(clusterBuilder ->
                                 clusterBuilder.serverSelectionTimeout(properties.getServerSelectionTimeout(), TimeUnit.SECONDS)
                                         .localThreshold(properties.getLocalThreshold(),TimeUnit.SECONDS)
-                                        .requiredReplicaSetName(properties.getReplicaSet())
                                         .hosts(serverAddresses)
                                         .mode(ClusterConnectionMode.MULTIPLE)
-                                        .requiredClusterType(ClusterType.REPLICA_SET))
+                                        .requiredClusterType(ClusterType.SHARDED))
                         .applyToConnectionPoolSettings(poolBuilder ->
                                 poolBuilder.maxSize(properties.getMaxConnectionsPerHost()) //最大连接数
                                         .minSize(properties.getMinConnectionsPerHost()) //最小连接数
