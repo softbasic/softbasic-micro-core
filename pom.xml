@@ -140,7 +140,7 @@
     <repositories>
         <repository>
             <id>softbasic</id>
-            <url>http://repository.softbasic.org</url>
+            <url>https://repository.softbasic.org</url>
         </repository>
     </repositories>
 
@@ -148,20 +148,20 @@
     <pluginRepositories>
         <pluginRepository>
             <id>softbasic</id>
-            <url>http://repository.softbasic.org</url>
+            <url>https://repository.softbasic.org</url>
         </pluginRepository>
     </pluginRepositories>
 
     <distributionManagement>
         <snapshotRepository>
             <id>softbasic</id>
-            <url>http://snapshots.repository.softbasic.org</url>
+            <url>https://snapshots.repository.softbasic.org</url>
 
         </snapshotRepository>
 
         <repository>
             <id>softbasic</id>
-            <url>http://releases.repository.softbasic.org</url>
+            <url>https://releases.repository.softbasic.org</url>
         </repository>
     </distributionManagement>
 
