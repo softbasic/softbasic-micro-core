@@ -94,7 +94,7 @@
         <dependency>
             <groupId>org.redisson</groupId>
             <artifactId>redisson</artifactId>
-            <version>3.10.6</version>
+            <version>3.22.0</version>
         </dependency>
 
         <!--rocketmq和redisson都用到了netty，二者版本有冲突，在rocketmq中把netty排除了，这里统一指定-->
